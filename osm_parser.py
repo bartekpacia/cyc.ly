@@ -25,7 +25,8 @@ class OSMParser:
         try:
             way = next(way for way in self.ways if way.id == id)
 
-            way.nodes = [self.get_node(nd.ref) for nd in way.nds]
+            nodes = [self.get_node(nd.ref) for nd in way.nds]
+            way.nodes = [x for x in nodes if x is not None]
 
             return way
         except:
@@ -36,6 +37,28 @@ class OSMParser:
             relation = next(
                 relation for relation in self.relations if relation.id == id
             )
+
+            filtered_ways = [
+                member for member in relation.members if member.type == "way"
+            ]
+
+            relation.ways = [
+                way
+                for member in filtered_ways
+                for way in self.ways
+                if way.id == member.ref
+            ]
+
+            filtered_nodes = [
+                member for member in relation.members if member.type == "node"
+            ]
+
+            relation.nodes = [
+                node
+                for member in filtered_nodes
+                for node in self.nodes
+                if node.id == member.ref
+            ]
             return relation
         except:
             return None

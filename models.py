@@ -1,23 +1,23 @@
 import xml.etree.ElementTree as ET
-
-
-def read_model(model, parent: ET.Element):
-    return [model.parsed(item) for item in parent.findall(model.selector)]
+from dataclasses import dataclass, field
+from typing import Self, Type
 
 
 class IModel:
-    selector: str
+    selector: str = ""
 
-    @staticmethod
-    def parsed(item: ET.Element):
-        pass
+    def parsed(self, item: ET.Element) -> Self:
+        return self
 
 
+def read_model(model: Type, parent: ET.Element) -> Type:
+    return [model.parsed(item) for item in parent.findall(model.selector)]
+
+
+@dataclass
 class Nd(IModel):
     selector = "nd"
-
-    def __init__(self, ref: int):
-        self.ref = ref
+    ref: int
 
     @staticmethod
     def parsed(item):
@@ -26,12 +26,11 @@ class Nd(IModel):
         )
 
 
+@dataclass
 class Tag(IModel):
+    k: str
+    v: str
     selector = "tag"
-
-    def __init__(self, k: str, v: str):
-        self.k = k
-        self.v = v
 
     @staticmethod
     def parsed(item):
@@ -41,17 +40,14 @@ class Tag(IModel):
         )
 
 
+@dataclass
 class Node(IModel):
     selector = "node"
-
-    def __init__(
-        self, id: int, visible: bool, lat: float, lon: float, tags: list[Tag] = []
-    ):
-        self.id = id
-        self.visible = visible
-        self.lat = lat
-        self.lon = lon
-        self.tags = tags
+    id: int
+    visible: bool
+    lat: float
+    lon: float
+    tags: list[Tag]
 
     @staticmethod
     def parsed(item):
@@ -64,40 +60,33 @@ class Node(IModel):
         )
 
 
+@dataclass
 class Way(IModel):
     selector = "way"
 
-    def __init__(
-        self,
-        id: int,
-        visible: bool,
-        nds: list[Nd] = [],
-        tags: list[Tag] = [],
-        nodes: list[Node] = [],
-    ):
-        self.id = id
-        self.visible = visible
-        self.nds = nds
-        self.tags = tags
-        self.nodes = nodes
+    id: int
+    visible: bool
+    nds: list[Nd] = field(default_factory=list)
+
+    tags: list[Tag] = field(default_factory=list)
+    nodes: list[Node] = field(default_factory=list)
 
     @staticmethod
     def parsed(item):
         return Way(
             int(item.attrib["id"]),
             item.attrib["visible"] == "true",
-            read_model(Nd, item),
+            read_model(Nd.selector, item),
         )
 
 
+@dataclass
 class Bounds:
     selector = "bounds"
-
-    def __init__(self, max_lat, min_lat, max_lon, min_lon):
-        self.max_lat = max_lat
-        self.min_lat = min_lat
-        self.max_lon = max_lon
-        self.min_lon = min_lon
+    max_lat: float
+    min_lat: float
+    max_lon: float
+    min_lon: float
 
     @staticmethod
     def parsed(item):
@@ -109,13 +98,12 @@ class Bounds:
         )
 
 
+@dataclass
 class Member(IModel):
     selector = "member"
-
-    def __init__(self, type: str, ref: int, role: str):
-        self.type = type
-        self.ref = ref
-        self.role = role
+    type: str
+    ref: int
+    role: str
 
     @staticmethod
     def parsed(item: ET.Element):
@@ -126,23 +114,15 @@ class Member(IModel):
         )
 
 
+@dataclass
 class Relation(IModel):
     selector = "relation"
-
-    def __init__(
-        self,
-        id: int,
-        visible: bool,
-        members: list[Member],
-        nodes: list[Node] = [],
-        ways: list[Way] = [],
-    ):
-        self.id = id
-        self.visible = visible
-        self.members = members
-
-        self.nodes = nodes
-        self.ways = ways
+    id: int
+    visible: bool
+    members: list[Member]
+    tags: list[Tag]
+    nodes: list[Node] = field(default_factory=list)
+    ways: list[Way] = field(default_factory=list)
 
     @staticmethod
     def parsed(item: ET.Element):
@@ -150,4 +130,5 @@ class Relation(IModel):
             int(item.attrib["id"]),
             item.attrib["visible"] == "true",
             read_model(Member, item),
+            read_model(Tag, item),
         )
