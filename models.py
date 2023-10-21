@@ -1,10 +1,11 @@
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from typing import Self, Type
+from abc import ABC
 
 
-class IModel:
-    selector: str = ""
+class IModel(ABC):
+    selector: str
 
     def parsed(self, item: ET.Element) -> Self:
         return self
@@ -76,7 +77,7 @@ class Way(IModel):
         return Way(
             int(item.attrib["id"]),
             item.attrib["visible"] == "true",
-            read_model(Nd.selector, item),
+            read_model(Nd, item),
         )
 
 
@@ -101,6 +102,7 @@ class Bounds:
 @dataclass
 class Member(IModel):
     selector = "member"
+    # narazie znane są tylko node i way
     type: str
     ref: int
     role: str

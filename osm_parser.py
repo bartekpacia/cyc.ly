@@ -25,8 +25,10 @@ class OSMParser:
         try:
             way = next(way for way in self.ways if way.id == id)
 
-            nodes = [self.get_node(nd.ref) for nd in way.nds]
-            way.nodes = [x for x in nodes if x is not None]
+            for nd in way.nds:
+                found = self.get_node(nd.ref)
+                if found:
+                    way.nodes.append(found)
 
             return way
         except:
@@ -42,23 +44,20 @@ class OSMParser:
                 member for member in relation.members if member.type == "way"
             ]
 
-            relation.ways = [
-                way
-                for member in filtered_ways
-                for way in self.ways
-                if way.id == member.ref
-            ]
+            for member in filtered_ways:
+                found = self.get_way(member.ref)
+                if found:
+                    relation.ways.append(found)
 
             filtered_nodes = [
                 member for member in relation.members if member.type == "node"
             ]
 
-            relation.nodes = [
-                node
-                for member in filtered_nodes
-                for node in self.nodes
-                if node.id == member.ref
-            ]
+            for member in filtered_nodes:
+                found = self.get_node(member.ref)
+                if found:
+                    relation.nodes.append(found)
+
             return relation
         except:
             return None
