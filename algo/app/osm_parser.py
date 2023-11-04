@@ -1,5 +1,14 @@
-from models import Way, IModel, Node, Nd, read_model, Bounds, Relation
 import xml.etree.ElementTree as ET
+
+from .models import (
+    Way,
+    IModel,
+    Node,
+    Nd,
+    read_model,
+    Bounds,
+    Relation,
+)
 
 
 class OSMParser:
