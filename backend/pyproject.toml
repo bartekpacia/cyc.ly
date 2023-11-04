@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "cycly"
+version = "0.1.0"
+description = ""
+authors = ["BartoszBugla <48729791+BartoszBugla@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+uvicorn = "^0.23.2"
+fastapi = "^0.104.0"
+pydantic = "^2.4.2"
+sqlalchemy = "^2.0.22"
+click = "^8.1.7"
+pydantic-settings = "^2.0.3"
+alembic = "^1.12.1"
+
+[tool.poetry.scripts]
+main = "app.main:main"
+run-prod = "my_module:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
