@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "cycly"
+name = "app"
 version = "0.1.0"
-description = ""
+description = "Backend for cyc.ly app"
 authors = ["BartoszBugla <48729791+BartoszBugla@users.noreply.github.com>"]
 readme = "README.md"
 
