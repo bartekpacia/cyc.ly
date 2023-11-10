@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from app.core.db import get_db
+from core.db import get_db
 
 from .users_schemas import UserSchema, UserCreateSchema
 from .users_service import *

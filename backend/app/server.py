@@ -1,20 +1,10 @@
-import os
-
-import click
-import uvicorn
-
-from app.core.config import config
-
-from typing import List
-
 from fastapi import FastAPI, Request, Depends
 from fastapi.middleware import Middleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-
-from app.paths import paths_router
-from app.users import users_router
+from paths import paths_router
+from users import users_router
 
 
 def init_routers(app_: FastAPI) -> None:
