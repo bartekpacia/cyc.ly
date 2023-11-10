@@ -6,18 +6,21 @@ import os
 class Config(BaseSettings):
     APP_HOST: str = "0.0.0.0"
     APP_PORT: int = 8000
-    DB_URL: str = f"sqlite:///./sql_app.db"
+    DEBUG: bool = False
+    ENV: str = "undefined"
+    DB_URL: str = "undefined"
 
 
 class LocalConfig(Config):
-    ENV: str = "development"
     DEBUG: bool = True
+    ENV: str = "development"
     DB_URL: str = f"sqlite:///./sql_app.db"
 
 
 class ProductionConfig(Config):
     DEBUG: bool = False
-    # DB_URL: str = f"mysql+aiomysql://fastapi:fastapi@localhost:3306/prod"
+    ENV: str = "undefined"
+    DB_URL: str = f"mysql+aiomysql://fastapi:fastapi@localhost:3306/prod"
 
 
 def get_config():

@@ -10,4 +10,4 @@ class UserSchema(BaseModel):
     email: str = Field(description="Use Email")
 
     class Config:
-        orm_mode = True
+        from_attributes = True

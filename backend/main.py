@@ -22,6 +22,10 @@ def main(env: str, debug: bool):
     os.environ["ENV"] = env
     os.environ["DEBUG"] = str(debug)
 
+    print(f"Running with env: {env}")
+    print(f"Running in debug: {debug}")
+
+
     uvicorn.run(
         app="app.server:app",
         host=config.APP_HOST,
