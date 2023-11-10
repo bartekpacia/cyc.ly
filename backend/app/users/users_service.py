@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from sqlalchemy.orm import Session
 
 from core.models.user import User

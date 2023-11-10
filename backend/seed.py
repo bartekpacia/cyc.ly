@@ -1,8 +1,6 @@
-from sqlalchemy.orm import Session
-
 from app.core.db import Base, engine, get_db
 
-from app.core.models import User
+from app.users import User
 
 Base.metadata.drop_all(engine)
 Base.metadata.create_all(engine)

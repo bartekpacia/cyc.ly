@@ -7,6 +7,10 @@ on:
 jobs:
   main:
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
       - name: Clone repository
@@ -14,6 +18,8 @@ jobs:
 
       - name: Set up Python
         uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
 
       - name: Set up linter
         run: pip install ruff
@@ -22,6 +28,6 @@ jobs:
         run: ruff check .
         if: success() || failure()
 
-      - name: Run linter
+      - name: Run formatter
         run: ruff check .
         if: success() || failure()
