@@ -6,7 +6,7 @@ authors = ["BartoszBugla <48729791+BartoszBugla@users.noreply.github.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 uvicorn = "^0.23.2"
 fastapi = "^0.104.0"
 pydantic = "^2.4.2"

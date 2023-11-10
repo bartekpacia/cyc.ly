@@ -1,0 +1,27 @@
+name: prepare
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      - name: Set up linter
+        run: pip install ruff
+
+      - name: Run linter
+        run: ruff check .
+        if: success() || failure()
+
+      - name: Run linter
+        run: ruff check .
+        if: success() || failure()
