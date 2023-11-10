@@ -13,7 +13,7 @@ poetry install
 ### Run server
 
 ```
-poetry run python main.py
+docker compose up --build
 ```
 
 [Install Poetry]: https://python-poetry.org/docs/#installation
