@@ -1,24 +1,12 @@
-import os
+from fastapi import FastAPI
 
-import click
-import uvicorn
-
-from app.core.config import config
-
-from typing import List
-
-from fastapi import FastAPI, Request, Depends
-from fastapi.middleware import Middleware
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-
-
-from app.paths import paths_router
-from app.users import users_router
+from paths.paths_router import paths_router
+from users.users_router import users_router
 
 
 def init_routers(app_: FastAPI) -> None:
     app_.include_router(users_router)
+    app_.include_router(paths_router)
 
 
 # def init_listeners(app_: FastAPI) -> None:
@@ -70,7 +58,7 @@ def create_app() -> FastAPI:
         description="Cycly API",
         version="1.0.0",
         docs_url="/docs",
-        redoc_url="/redoc"
+        redoc_url="/redoc",
         # dependencies=[Depends(Logging)],
         # middleware=make_middleware(),
     )

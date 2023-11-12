@@ -1,8 +1,6 @@
-from typing import Annotated
-
 from sqlalchemy.orm import Session
 
-from app.core.models.user import User
+from core.models.user import User
 
 from .users_schemas import UserCreateSchema
 
