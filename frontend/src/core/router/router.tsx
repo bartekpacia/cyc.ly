@@ -7,7 +7,11 @@ export const router = createBrowserRouter([
     Component: lazy(() => import('@/path-finder/views/LandingPage')),
   },
   {
-    path: '/test',
-    element: <div>dsds</div>,
+    path: '/generate-path',
+    Component: lazy(() => import('@/path-finder/views/PathfinderForm')),
+  },
+  {
+    path: '/path-preview',
+    Component: lazy(() => import('@/path-finder/views/PathPreview')),
   },
 ]);

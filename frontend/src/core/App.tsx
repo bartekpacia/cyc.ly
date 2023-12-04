@@ -1,6 +1,7 @@
+import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import { ThemeProvider } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { QueryClient } from '@tanstack/react-query';
 
@@ -19,7 +20,10 @@ export const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={mainTheme}>
-        <RouterProvider router={router} />
+        <CssBaseline />
+        <Suspense fallback={<div>Loading...</div>}>
+          <RouterProvider router={router} />
+        </Suspense>
       </ThemeProvider>
     </QueryClientProvider>
   );
