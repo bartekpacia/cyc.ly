@@ -3,11 +3,11 @@ from enum import Enum
 
 
 class BikeType(str, Enum):
-    Road = "Road"
+    ROAD = "Road"
     BMX = "BMX"
-    Mountain = "Mountain"
-    Recumbent = "Recumbent"
-    Gravel = "Gravel"
+    MOUNTAIN = "Mountain"
+    RECUMBENT = "Recumbent"
+    GRAVEL = "Gravel"
 
 
 class Coords(BaseModel):
@@ -15,12 +15,14 @@ class Coords(BaseModel):
     lon: float = Field(description="Use Longitude")
 
 
-class CreateRouteDTO(BaseModel):
+class CreateRouteBodyDTO(BaseModel):
     bike_type: BikeType = Field(description="Bike Type")
     start_point: Coords = Field(description="Use Start Point")
-    distance: float = Field(description="Path Distance")
+    distance: float = Field(
+        description="Path Distance",
+    )
 
 
-class RouteDTO(BaseModel):
+class Route(BaseModel):
     # id: int = Field(description="Route id")
     points: list[Coords] = Field(description="Route points")

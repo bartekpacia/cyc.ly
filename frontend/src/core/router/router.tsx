@@ -1,17 +1,19 @@
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 
+import { routes } from '.';
+
 export const router = createBrowserRouter([
   {
-    path: '/',
-    Component: lazy(() => import('@/path-finder/views/LandingPage')),
+    path: routes.home(),
+    Component: lazy(() => import('@/route-finder/views/LandingPage')),
   },
   {
-    path: '/generate-path',
-    Component: lazy(() => import('@/path-finder/views/PathfinderForm')),
+    path: routes.generateRoute(),
+    Component: lazy(() => import('@/route-finder/views/RoutefinderForm')),
   },
   {
-    path: '/path-preview',
-    Component: lazy(() => import('@/path-finder/views/PathPreview')),
+    path: routes.preview(),
+    Component: lazy(() => import('@/route-finder/views/RoutePreview')),
   },
 ]);

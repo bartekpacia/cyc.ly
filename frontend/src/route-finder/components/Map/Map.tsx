@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MapContainer, MapContainerProps, Marker, TileLayer } from 'react-leaflet';
 
+import { Box } from '@mui/material';
 import { Map as MapType } from 'leaflet';
 
 interface MapProps extends MapContainerProps {}
@@ -18,19 +19,21 @@ const Map = ({ center, zoom, ...props }: MapProps) => {
   }, [center, zoom, map]);
 
   return (
-    <MapContainer
-      id='map'
-      style={{ height: '100%', width: '100%' }}
-      center={center}
-      zoom={zoom}
-      scrollWheelZoom={false}
-      attributionControl={false}
-      ref={setMap}
-      {...props}
-    >
-      <TileLayer {...tileLayer} />
-      {/* <Marker /> */}
-    </MapContainer>
+    <Box sx={{ height: '100%', width: '100%', borderRadius: '10px' }}>
+      <MapContainer
+        id='map'
+        style={{ height: '100%', width: '100%', borderRadius: '10px' }}
+        center={center}
+        zoom={zoom}
+        scrollWheelZoom={false}
+        attributionControl={false}
+        ref={setMap}
+        {...props}
+      >
+        <TileLayer {...tileLayer} />
+        {center && <Marker position={center} />}
+      </MapContainer>
+    </Box>
   );
 };
 

@@ -1,3 +1,5 @@
 export const routes = {
-  home: '/',
+  home: () => '/cycly/',
+  generateRoute: () => '/cycly/generate-route',
+  preview: () => '/cycly/preview',
 };

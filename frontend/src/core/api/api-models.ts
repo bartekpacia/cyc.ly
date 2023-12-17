@@ -9,10 +9,55 @@
  * ---------------------------------------------------------------
  */
 
+/** BikeType */
+export enum BikeType {
+  Road = 'Road',
+  BMX = 'BMX',
+  Mountain = 'Mountain',
+  Recumbent = 'Recumbent',
+  Gravel = 'Gravel',
+}
+
+/** Coords */
+export interface Coords {
+  /**
+   * Lat
+   * Use Latitude
+   */
+  lat: number;
+  /**
+   * Lon
+   * Use Longitude
+   */
+  lon: number;
+}
+
+/** CreateRouteBodyDTO */
+export interface CreateRouteBodyDTO {
+  /** Bike Type */
+  bike_type: BikeType;
+  /** Use Start Point */
+  start_point: Coords;
+  /**
+   * Distance
+   * Path Distance
+   */
+  distance: number;
+}
+
 /** HTTPValidationError */
 export interface HTTPValidationError {
   /** Detail */
   detail?: ValidationError[];
+}
+
+/** Route */
+export interface Route {
+  /**
+   * Points
+   * Route points
+   */
+  points: Coords[];
 }
 
 /** UserCreateSchema */
@@ -209,7 +254,7 @@ export class HttpClient<SecurityDataType = unknown> {
 
   public request = async <T = any, E = any>(
     { body, secure, path, type, query, format, baseUrl, cancelToken, ...params }: FullRequestParams,
-  ): Promise<HttpResponse<T, E>> => {
+  ): Promise<T> => {
     const secureParams =
       ((typeof secure === 'boolean' ? secure : this.baseApiParams.secure) &&
         this.securityWorker &&
@@ -257,7 +302,7 @@ export class HttpClient<SecurityDataType = unknown> {
       }
 
       if (!response.ok) throw data;
-      return data;
+      return data.data;
     });
   };
 }
@@ -297,6 +342,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     readUsersUsersPost: (data: UserCreateSchema, params: RequestParams = {}) =>
       this.request<any, HTTPValidationError>({
         path: `/users/`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+  };
+  routes = {
+    /**
+     * No description
+     *
+     * @tags paths
+     * @name CreateRouteRoutesPost
+     * @summary Create Route
+     * @request POST:/routes/
+     */
+    createRouteRoutesPost: (data: CreateRouteBodyDTO, params: RequestParams = {}) =>
+      this.request<Route, HTTPValidationError>({
+        path: `/routes/`,
         method: 'POST',
         body: data,
         type: ContentType.Json,

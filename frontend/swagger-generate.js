@@ -8,4 +8,5 @@ sta.generateApi({
   // eslint-disable-next-line
   output: path.resolve(process.cwd(), PATH_TO_OUTPUT_DIR),
   url: 'http://localhost:8000/openapi.json',
+  unwrapResponseData: true,
 });

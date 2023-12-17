@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware import Middleware
 
 from routes.routes_router import routes_router
 from users.users_router import users_router
@@ -32,24 +34,24 @@ def init_routers(app_: FastAPI) -> None:
 #     )
 
 
-# def make_middleware() -> List[Middleware]:
-#     middleware = [
-#         Middleware(
-#             CORSMiddleware,
-#             allow_origins=["*"],
-#             allow_credentials=True,
-#             allow_methods=["*"],
-#             allow_headers=["*"],
-#         ),
-#         Middleware(
-#             AuthenticationMiddleware,
-#             backend=AuthBackend(),
-#             on_error=on_auth_error,
-#         ),
-#         Middleware(SQLAlchemyMiddleware),
-#         Middleware(ResponseLogMiddleware),
-#     ]
-#     return middleware
+def make_middleware() -> list[Middleware]:
+    middleware = [
+        Middleware(
+            CORSMiddleware,
+            allow_origins=["*"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        ),
+        # Middleware(
+        #     AuthenticationMiddleware,
+        #     backend=AuthBackend(),
+        #     on_error=on_auth_error,
+        # ),
+        # Middleware(SQLAlchemyMiddleware),
+        # Middleware(ResponseLogMiddleware),
+    ]
+    return middleware
 
 
 def create_app() -> FastAPI:
@@ -60,7 +62,7 @@ def create_app() -> FastAPI:
         docs_url="/docs",
         redoc_url="/redoc",
         # dependencies=[Depends(Logging)],
-        # middleware=make_middleware(),
+        middleware=make_middleware(),
     )
     init_routers(app_=app_)
 

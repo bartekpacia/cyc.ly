@@ -5,6 +5,7 @@ import { Button, Divider, Grow, Stack, Typography } from '@mui/material';
 import heroImage from '@/assets/hero-image.jpg';
 import typeOfBike from '@/assets/type-of-bike.jpg';
 import waitForRoute from '@/assets/wait-for-route.jpg';
+import { routes } from '@/core/router';
 
 import { LandingBox } from '../components/LandingBox';
 import { PathFinderLayout } from '../components/PathFinderLayout';
@@ -69,7 +70,7 @@ const LandingPage = () => {
             </Typography>
           </Grow>
           <Grow timeout={2000} in={true}>
-            <Link to='/generate-path'>
+            <Link to={routes.generateRoute()}>
               <Button variant='contained'>Take me there!</Button>
             </Link>
           </Grow>
