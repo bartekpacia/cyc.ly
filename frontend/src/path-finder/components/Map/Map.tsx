@@ -29,7 +29,7 @@ const Map = ({ center, zoom, ...props }: MapProps) => {
       {...props}
     >
       <TileLayer {...tileLayer} />
-      <Marker position={center} />
+      {/* <Marker /> */}
     </MapContainer>
   );
 };

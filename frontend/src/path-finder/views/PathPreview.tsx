@@ -1,5 +1,3 @@
-import { MapContainer, TileLayer } from 'react-leaflet';
-
 import { Box, Stack } from '@mui/material';
 
 import { Map } from '../components/Map/Map';

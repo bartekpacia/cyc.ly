@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import { Controller, Form, useForm } from 'react-hook-form';
-import { Marker } from 'react-leaflet';
 
+// import { Marker } from 'react-leaflet';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TrackChanges } from '@mui/icons-material';
 import {
@@ -20,11 +20,11 @@ import {
 import 'leaflet/dist/leaflet.css';
 import { z } from 'zod';
 
-import { Map } from '../components/Map/Map';
+// import { Map } from '../components/Map/Map';
 import { PathFinderLayout } from '../components/PathFinderLayout';
 import { useGeoLocation } from '../utils/use-geo-location';
 
-interface PathfinderFormProps {}
+// interface PathfinderFormProps {}
 
 enum PathfinderFormField {
   Longitude = 'longitude',
@@ -60,9 +60,9 @@ const PathfinderForm = () => {
             Enter you basic requirements and wait for our system to generate you perfect route
           </Typography>
           <Box sx={{ width: '100%', height: 200 }}>
-            <Map center={position}>
+            {/* <Map center={position}>
               <Marker position={position} />
-            </Map>
+            </Map> */}
           </Box>
 
           <Stack direction='row' gap={3} alignItems='flex-end'>
