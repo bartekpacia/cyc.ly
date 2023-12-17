@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { Box, Button, Divider, Grow, Stack, Typography } from '@mui/material';
+import { Button, Divider, Grow, Stack, Typography } from '@mui/material';
 
 import heroImage from '@/assets/hero-image.jpg';
 import typeOfBike from '@/assets/type-of-bike.jpg';

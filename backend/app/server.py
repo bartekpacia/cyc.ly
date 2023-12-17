@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 
-from paths.paths_router import paths_router
+from routes.routes_router import routes_router
 from users.users_router import users_router
 
 
 def init_routers(app_: FastAPI) -> None:
     app_.include_router(users_router)
-    app_.include_router(paths_router)
+    app_.include_router(routes_router)
 
 
 # def init_listeners(app_: FastAPI) -> None:
