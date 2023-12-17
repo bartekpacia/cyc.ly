@@ -23,13 +23,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        working-directory: ./frontend
       - name: Set up Node
         uses: actions/setup-node@v3
-        working-directory: ./frontend
         with:
           node-version: 18
           cache: 'npm'
+          cache-dependency-path: ./frontend/package-lock.json
+
       - name: Install dependencies
         run: npm install
         working-directory: ./frontend
