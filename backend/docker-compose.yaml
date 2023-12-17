@@ -13,10 +13,9 @@ services:
       DATABASE_PASSWORD: secret
       DATABASE_NAME: cycly
       DEBUG: 1
-    # volumes:
-    #   - type: bind
-    #     source: .
-    #     target: /app
+      GUNICORN_CMD_ARGS: --reload
+    volumes:
+        - ./app:/app
     restart: on-failure
 
 

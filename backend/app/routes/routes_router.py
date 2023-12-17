@@ -7,5 +7,5 @@ routes_router = APIRouter(prefix="/routes", tags=["paths"])
 
 
 @routes_router.get("/", response_model=RouteDTO)
-async def create_route(body=Body(CreateRouteDTO)):
-    return
+async def create_route(body: CreateRouteDTO = Body(...)):
+    return route_service.create_route(body)

@@ -23,6 +23,4 @@ class CreateRouteDTO(BaseModel):
 
 class RouteDTO(BaseModel):
     # id: int = Field(description="Route id")
-    bike_type: BikeType = Field(description="Bike Type")
-    start_point: Coords = Field(description="Use Start Point")
-    distance: float = Field(description="Path Distance")
+    points: list[Coords] = Field(description="Route points")
