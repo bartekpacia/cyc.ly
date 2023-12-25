@@ -1,5 +1,7 @@
+export const BASE = '/cyc.ly';
+
 export const routes = {
-  home: () => '/',
-  generateRoute: () => '/generate-route',
-  preview: () => '/preview',
+  home: () => `${BASE}/`,
+  generateRoute: () => `${BASE}/generate-route`,
+  preview: () => `${BASE}/preview`,
 };
