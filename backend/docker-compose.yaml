@@ -12,6 +12,12 @@ services:
       DATABASE_USER: root
       DATABASE_PASSWORD: secret
       DATABASE_NAME: cycly
+      DEBUG: 1
+      GUNICORN_CMD_ARGS: --reload
+    volumes:
+        - ./app:/app
+    restart: on-failure
+
 
   database:
     image: mysql:8.1

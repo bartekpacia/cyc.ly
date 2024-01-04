@@ -1,6 +1,5 @@
-import { Api } from '.';
+import { Api } from './api-models';
 
-export const api = () => new Api({
-  // @TODO: move it envs
+export const api = new Api({
   baseUrl: 'http://localhost:8000',
 });
