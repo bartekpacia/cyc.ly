@@ -26,10 +26,10 @@ export const mainTheme = createTheme({
       default: '#000000',
     },
     primary: {
-      main: purple[500],
+      main: green[500],
       contrastText: '#fff',
-      light: purple[300],
-      dark: purple[700],
+      light: green[300],
+      dark: green[700],
     },
     secondary: {
       main: '#fff',
@@ -74,6 +74,14 @@ export const mainTheme = createTheme({
             box-shadow: inset 0 0 20px 20px #23232329;
         }
         `,
+      },
+    },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          color: '#fff',
+          textDecoration: 'none',
+        },
       },
     },
     MuiButton: {
@@ -125,14 +133,6 @@ export const mainTheme = createTheme({
       },
     },
 
-    MuiLink: {
-      styleOverrides: {
-        root: {
-          color: '#fff',
-          textDecoration: 'none',
-        },
-      },
-    },
     MuiAppBar: {
       styleOverrides: {
         root: ({ theme }) => ({

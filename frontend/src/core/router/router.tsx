@@ -13,7 +13,11 @@ export const router = createBrowserRouter([
     Component: lazy(() => import('@/route-finder/views/RoutefinderForm')),
   },
   {
-    path: routes.preview(),
+    path: routes.preview(':id'),
     Component: lazy(() => import('@/route-finder/views/RoutePreview')),
+  },
+  {
+    path: routes.routes(),
+    Component: lazy(() => import('@/route-finder/views/RoutesList')),
   },
 ]);

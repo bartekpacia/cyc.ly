@@ -3,18 +3,24 @@ import {
   AppBar,
   Box,
   Container,
+  Hidden,
   IconButton,
   Link,
   Menu,
   MenuItem,
+  Stack,
   Toolbar,
   Typography,
 } from '@mui/material';
 
 import logo from '@/assets/logo/icon-192.png';
 import { useDialog } from '@/common/utils';
+import { routes } from '@/core/router';
 
-const pages: string[] = [];
+const pages = [
+  { name: 'Generate', href: routes.generateRoute() },
+  { name: 'Routes', href: routes.routes() },
+];
 
 const Navigation = () => {
   const [anchorEl, handleOpen, handleClose] = useDialog();
@@ -23,67 +29,65 @@ const Navigation = () => {
     <AppBar position='static'>
       <Container maxWidth='xl'>
         <Toolbar disableGutters>
-          <Link href='/' alignItems='center' justifyContent='center' display='flex'>
-            <Box
-              component='img'
-              src={logo}
-              sx={{
-                width: '45px',
-                height: '45px',
-                mr: 1,
-              }}
-            />
-            <Typography variant='h6' noWrap component='span' marginRight={2}>
-              Cycly
-            </Typography>
-          </Link>
-
-          <Box
-            sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' }, justifyContent: 'flex-end' }}
-          >
-            <IconButton
-              size='large'
-              aria-label='account of current user'
-              aria-controls='menu-appbar'
-              aria-haspopup='true'
-              onClick={handleOpen}
-              color='inherit'
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id='menu-appbar'
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
-            >
-              {pages.map(page => (
-                <MenuItem key={page} onClick={handleClose}>
-                  <Typography textAlign='center'>{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: 2 }}>
-            {pages.map(page => (
-              <Typography component='a' key={page} onClick={handleClose} href='#'>
-                {page}
+          <Stack direction='row' justifyContent='space-between' width='100%'>
+            <Link href='/' alignItems='center' justifyContent='center' display='flex'>
+              <Box
+                component='img'
+                src={logo}
+                sx={{
+                  width: '45px',
+                  height: '45px',
+                  mr: 1,
+                }}
+              />
+              <Typography variant='h6' noWrap component='span' marginRight={2}>
+                Cycly
               </Typography>
-            ))}
-          </Box>
+            </Link>
+
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: 'flex',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <IconButton
+                size='large'
+                aria-label='account of current user'
+                aria-controls='menu-appbar'
+                aria-haspopup='true'
+                onClick={handleOpen}
+                color='inherit'
+              >
+                <MenuIcon />
+              </IconButton>
+
+              <Menu
+                id='menu-appbar'
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                {pages.map(({ href, name }) => (
+                  <Link href={href} textAlign='center'>
+                    <MenuItem key={href} onClick={handleClose}>
+                      {name}
+                    </MenuItem>
+                  </Link>
+                ))}
+              </Menu>
+            </Box>
+          </Stack>
         </Toolbar>
       </Container>
     </AppBar>

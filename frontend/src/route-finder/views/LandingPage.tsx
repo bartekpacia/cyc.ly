@@ -21,35 +21,6 @@ const LandingPage = () => {
           gap={5}
           marginBottom={6}
         >
-          {/* <Box
-            sx={{
-              position: 'absolute',
-              top: '70%',
-              left: '60%',
-              transform: 'translate(-50%, -50%)',
-              width: 400,
-              height: 500,
-              zIndex: -1,
-
-              background:
-                'radial-gradient(circle, rgba(238,174,202,0.5) 0%, rgba(148,187,233,0) 50%)',
-            }}
-          />
-
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '60%',
-              left: '30%',
-              transform: 'translate(-50%, -50%)',
-              width: 400,
-              height: 500,
-              zIndex: -1,
-
-              background:
-                'radial-gradient(circle, rgba(238,174,202,0.5) 0%, rgba(148,187,233,0) 50%)',
-            }}
-          /> */}
           <Grow in={true}>
             <Typography variant='h3' textAlign='center'>
               Cycly - Create your own unique path
@@ -61,9 +32,6 @@ const LandingPage = () => {
               textAlign='center'
               sx={{
                 display: { xs: 'none', md: 'flex' },
-                // background: '-webkit-linear-gradient(#eee, #333)',
-                // WebkitBackgroundClip: 'text',
-                // WebkitTextFillColor: 'transparent',
               }}
             >
               Chart Your Course, Embrace Uniqueness
@@ -78,7 +46,7 @@ const LandingPage = () => {
       }
     >
       <Divider />
-      <Stack justifyContent='center' alignItems='center' gap={5} padding={10}>
+      <Stack justifyContent='center' alignItems='center' gap={5} padding={4}>
         <Typography variant='h3'>How It works</Typography>
         <Stack
           sx={{

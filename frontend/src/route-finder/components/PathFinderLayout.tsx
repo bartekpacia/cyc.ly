@@ -10,7 +10,6 @@ interface PathFinderLayoutProps {
 
 const PathFinderLayout = ({ children, flexElement }: PropsWithChildren<PathFinderLayoutProps>) => {
   return (
-    
     <Stack minHeight='100vh'>
       <Navigation />
       {flexElement && (
@@ -28,7 +27,10 @@ const PathFinderLayout = ({ children, flexElement }: PropsWithChildren<PathFinde
 
       <Box
         sx={{
-          flexGrow: 1,
+          flex: 1,
+          display: 'flex',
+          alignItems: 'stretch',
+          justifyContent: 'center',
         }}
       >
         {children}

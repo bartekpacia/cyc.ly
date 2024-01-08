@@ -2,6 +2,7 @@
 import { useEffect, useMemo } from 'react';
 import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
 import { Marker } from 'react-leaflet';
+import { useNavigate } from 'react-router-dom';
 
 // import { Marker } from 'react-leaflet';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,16 +15,19 @@ import {
   InputLabel,
   Link,
   MenuItem,
+  Paper,
   Select,
   Stack,
   TextField,
   Typography,
 } from '@mui/material';
+import { rootShouldForwardProp } from '@mui/material/styles/styled';
 import { useMutation } from '@tanstack/react-query';
 import 'leaflet/dist/leaflet.css';
 import { Schema, z } from 'zod';
 
 import { BikeType, CreateRouteBodyDTO, api } from '@/core/api';
+import { routes } from '@/core/router';
 import { useRoutesStore } from '@/core/store/routes.store';
 
 import { Map } from '../components/Map';
@@ -50,7 +54,8 @@ const schema = z.object({
 type SchemaType = z.infer<typeof schema>;
 
 const RouteFinderForm = () => {
-  const [pushRoute, routes] = useRoutesStore(state => [state.pushRoute, state.routes]);
+  const navigate = useNavigate();
+  const [pushRoute] = useRoutesStore(state => [state.pushRoute, state.routes]);
   const { mutateAsync: generateRoute } = useMutation({
     mutationFn: (data: CreateRouteBodyDTO) => api.routes.createRouteRoutesPost(data),
   });
@@ -67,7 +72,9 @@ const RouteFinderForm = () => {
         lon: values.lon,
       },
     });
-    pushRoute(newRoute);
+    const id = pushRoute(newRoute);
+
+    navigate(routes.preview(id.toString()));
   });
 
   const { coords, getGeoLocation } = useGeoLocation({ onMount: true });
@@ -84,8 +91,6 @@ const RouteFinderForm = () => {
       [RouteFinderFormField.Lon]: position.lng,
     });
   }, [position, formProps]);
-
-  console.log(routes);
 
   return (
     <PathFinderLayout>
@@ -128,7 +133,7 @@ const RouteFinderForm = () => {
           </Stack>
 
           <FormControl>
-            <InputLabel htmlFor='age-native-simple'>Type of your bike</InputLabel>
+            <InputLabel>Type of your bike</InputLabel>
             <Select
               label='Type of your bike'
               variant='outlined'

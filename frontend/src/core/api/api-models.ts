@@ -58,6 +58,18 @@ export interface Route {
    * Route points
    */
   points: Coords[];
+  /** Bike Type */
+  bike_type: BikeType;
+  /**
+   * Distance
+   * Path Distance
+   */
+  distance: number;
+  /**
+   * Created At
+   * Create at
+   */
+  created_at: string;
 }
 
 /** UserCreateSchema */
