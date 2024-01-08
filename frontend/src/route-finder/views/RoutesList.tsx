@@ -12,7 +12,7 @@ import { PathFinderLayout } from '../components/PathFinderLayout';
 
 interface RoutesListProps {}
 
-const RoutesList = (props: RoutesListProps) => {
+const RoutesList = () => {
   const { routes, deleteRoute } = useRoutesStore();
 
   const navigate = useNavigate();
