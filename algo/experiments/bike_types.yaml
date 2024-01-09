@@ -1,0 +1,27 @@
+# W tym pliku znajduja sie wagi dla kazdego rozdzaju rowera.
+# TODO: ustawic recznie i prawdopodobnie zmniejszyc ilosc rozwazanych nawierzhcni (bo jest ich za duzo)
+Road:
+  {'paved' : 0.0, 'asphalt' : 0.0, 'cobblestone' : 0.0, 'ground' : 0.0, 'paving_stones' : 0.0,
+    'gravel' : 0.0, 'sett' : 0.0, 'concrete' : 0.0, 'earth' : 0.0, 'compacted' : 0.0, 'dirt' : 0.0,
+    'unpaved' : 0.0, 'wood' : 0.0, 'pebblestone' : 0.0, 'fine_gravel' : 0.0, 'grass' : 0.0,
+    'grass_paver' : 0.0, 'concrete:plates' : 0.0, 'unhewn_cobblestone' : 0.0}
+BMX:
+  {'paved' : 0.0, 'asphalt' : 0.0, 'cobblestone' : 0.0, 'ground' : 0.0, 'paving_stones' : 0.0,
+    'gravel' : 0.0, 'sett' : 0.0, 'concrete' : 0.0, 'earth' : 0.0, 'compacted' : 0.0, 'dirt' : 0.0,
+    'unpaved' : 0.0, 'wood' : 0.0, 'pebblestone' : 0.0, 'fine_gravel' : 0.0, 'grass' : 0.0,
+    'grass_paver' : 0.0, 'concrete:plates' : 0.0, 'unhewn_cobblestone' : 0.0}
+Mountain:
+  {'paved' : 0.0, 'asphalt' : 0.0, 'cobblestone' : 0.0, 'ground' : 0.0, 'paving_stones' : 0.0,
+    'gravel' : 0.0, 'sett' : 0.0, 'concrete' : 0.0, 'earth' : 0.0, 'compacted' : 0.0, 'dirt' : 0.0,
+    'unpaved' : 0.0, 'wood' : 0.0, 'pebblestone' : 0.0, 'fine_gravel' : 0.0, 'grass' : 0.0,
+    'grass_paver' : 0.0, 'concrete:plates' : 0.0, 'unhewn_cobblestone' : 0.0}
+Recumbent:
+  {'paved' : 0.0, 'asphalt' : 0.0, 'cobblestone' : 0.0, 'ground' : 0.0, 'paving_stones' : 0.0,
+    'gravel' : 0.0, 'sett' : 0.0, 'concrete' : 0.0, 'earth' : 0.0, 'compacted' : 0.0, 'dirt' : 0.0,
+    'unpaved' : 0.0, 'wood' : 0.0, 'pebblestone' : 0.0, 'fine_gravel' : 0.0, 'grass' : 0.0,
+    'grass_paver' : 0.0, 'concrete:plates' : 0.0, 'unhewn_cobblestone' : 0.0}
+Gravel:
+  {'paved' : 0.0, 'asphalt' : 0.0, 'cobblestone' : 0.0, 'ground' : 0.0, 'paving_stones' : 0.0,
+    'gravel' : 0.0, 'sett' : 0.0, 'concrete' : 0.0, 'earth' : 0.0, 'compacted' : 0.0, 'dirt' : 0.0,
+    'unpaved' : 0.0, 'wood' : 0.0, 'pebblestone' : 0.0, 'fine_gravel' : 0.0, 'grass' : 0.0,
+    'grass_paver' : 0.0, 'concrete:plates' : 0.0, 'unhewn_cobblestone' : 0.0}
