@@ -1,4 +1,3 @@
-from core.models.user import User
 from .routes_schemas import CreateRouteBodyDTO, Route, Coords
 from .mock import mock_data
 
