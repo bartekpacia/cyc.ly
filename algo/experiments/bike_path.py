@@ -2,6 +2,7 @@ import numpy as np
 import networkx as nx
 import osmnx as ox
 import yaml
+import time
 
 class RouteFinder:
     def __init__(self, **kwargs):
@@ -29,12 +30,12 @@ class RouteFinder:
 
         # Weight functions
         self.key = 0
-        self.weight_func = lambda u, v, d: self.bike_types[self.bike_type][ d[self.key]["surface"] ] if "surface" in d.keys() else 0.0
-        self.weight_func_dist = lambda u, v, d: self.weight_func(u, v, d) + d[self.key]["length"]
+        self.weight_func = lambda u, v, d: self.bike_types[self.bike_type][ d[self.key]["surface"] ] if "surface" in d.keys() else 1.0
+        self.weight_func_dist = lambda u, v, d: self.weight_func(u, v, d) * d[self.key]["length"]
         self.weight_func_back = lambda u, v, d: self.weight_func_dist(u, v, d) + float('inf') if d[self.key]["visited"]==True else self.weight_func_dist(u, v, d)
-
-    def make_route(self, distance, start=None, error = 10, divisions = 4):
-
+        # self.weight_func_back = lambda u, v, d: self.weight_func_dist(u, v, d)*3.0 if d[self.key]["visited"]==True else self.weight_func_dist(u, v, d)
+    
+    def make_route(self, distance, start=None, divisions = 5):
         ### init varaibles ###
         if start == None:
              start = self.starting_pos
@@ -56,45 +57,32 @@ class RouteFinder:
 
         ### "Going for a little walk, brb" part - loop start###
         while acceptable_attemps < 10:
-            # TODO: Brzydkie rozwiazanie, ma zapewnic ze w przypadkujak nie ma polaczenie ze znalezionym wierzcholkiem, algorytm sprobuje ponownie -> nx zwraca exception
-            try: # Try to find destination point - if not accessible, try again
-                b = self.find_part(a, previous, part, part_previous, error)
-                part_path = nx.astar_path(self.G, a, b, heuristic=self.dist_func, weight=self.weight_func_dist)
-                part_distance = nx.path_weight(self.G, part_path, 'length')
-            except: # Re-run the iteration
-                acceptable_attemps+=1
-                continue
-
+            b = self.find_part(a, previous, part, part_previous)
             part_path = nx.astar_path(self.G, a, b, heuristic=self.dist_func, weight=self.weight_func_dist)
             part_distance = nx.path_weight(self.G, part_path, 'length')
 
             # Check path back from the found 'b' node:
-            try:
-                back_path = nx.astar_path(self.G, b, start, heuristic=self.dist_func, weight=self.weight_func_back)
-                back_distance = nx.path_weight(self.G, back_path, 'length')
-            except:
-                acceptable_attemps+=1
-                continue
+            back_path = nx.astar_path(self.G, b, start, heuristic=self.dist_func, weight=self.weight_func_back)
+            back_distance = nx.path_weight(self.G, back_path, 'length')
 
             # See if need to go back and what approach is better:
             if total_distance+part_distance+back_distance > distance*1.05:
-                try:
-                    back_path_previous = nx.astar_path(self.G, a, start, heuristic=self.dist_func, weight=self.weight_func_back)
-                    back_distance_previous = nx.path_weight(self.G, back_path_previous, 'length')
-                except:
-                    acceptable_attemps+=1
-                    continue
+                back_path_previous = nx.astar_path(self.G, a, start, heuristic=self.dist_func, weight=self.weight_func_back)
+                back_distance_previous = nx.path_weight(self.G, back_path_previous, 'length')
+
                 if total_distance+back_distance_previous > distance*0.95: # If previous solution is long enough
                     path += back_path_previous[1:]
                     total_distance = nx.path_weight(self.G, path, 'length')
                     return path, total_distance
+                
                 else: # If it is not, try with a smaller part
                     part /= 2
                     acceptable_attemps +=1
                     continue
+
             elif total_distance+part_distance+back_distance > distance*0.95: # if found solution is long enough, go back
-                # print("exit b")
                 break
+
             # Otherwise, continue walk
             
             # Update state of nodes, path and algorithm:
@@ -102,6 +90,9 @@ class RouteFinder:
                 break
             part_previous = part
             i+=1
+            # Mark visited
+            for edge in range(0, len(part_path)-1, 1):
+                self.G.edges[part_path[edge], part_path[edge+1], 0]['visited']=True
             path += part_path[1:]
             total_distance = nx.path_weight(self.G, path, 'length')
             previous = a
@@ -113,29 +104,28 @@ class RouteFinder:
         path += back_path[1:]
         total_distance = nx.path_weight(self.G, path, 'length')
         return path, total_distance
-        
-    def find_part(self, start, previous, distance, distance_previous, error):
-        possible_b_points = []
+    
+    def find_part(self, start, previous, distance, distance_previous):
         a = start
-        for id, vals in self.G.nodes(data=True):
-            d = self.dist_func(a, id) # Distance between 'a' node and inspected node
-            d_prev = self.dist_func(previous, id) # Distance between 'previous' node and inspected node
-            if distance-error < d < distance+error and distance_previous-error < d_prev < distance_previous+error:
-                possible_b_points.append(id)
-            if len(possible_b_points) >= 30:
-                break
-        if len(possible_b_points) == 0:
-            return self.find_part(start, previous, distance, distance_previous, error*2) # double the allowed error
-        b = np.random.choice(possible_b_points, size=1)[0]  # Pick point at random
-        return b
+        best_b = a
+        best_score = float('inf')
+
+        # Run dijkastra
+        dijkstra_distnaces, dijkstra_paths = nx.single_source_dijkstra(self.G, a, weight=self.weight_func_dist, cutoff=distance)
+        for k, v in dijkstra_distnaces.items():
+            d = self.dist_func(a, k) # Distance between 'a' node and inspected node
+            d_prev = self.dist_func(previous, k) # Distance between 'previous' node and inspected node
+            score = (d-distance)**2 + (d_prev-distance_previous)**2 # Calculate MSE
+            if score < best_score:
+                best_score = score
+                best_b = k
+        return best_b
     
     def plot_graph(self, path):
         return ox.plot_graph_route(self.G, path)
     
     def nearest_nodes(self, pos=(50.291100737108025, 18.680043199195698)):
         return ox.nearest_nodes(self.G, Y=pos[0], X=pos[1])
-
     
     def nodes_to_cords(self, path):
         return [[self.G.nodes[el]['y'], self.G.nodes[el]['x']] for el in path]
-        
