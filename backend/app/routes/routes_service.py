@@ -16,9 +16,6 @@ class RouteService:
         print("created rf")
 
     def create_route(self, body: CreateRouteBodyDTO):
-
-        print(self.rf.pos)
-        print(self.rf.dist)
         self.rf.bike_type = body.bike_type
         lat = body.start_point.lat
         lon = body.start_point.lon
@@ -26,7 +23,6 @@ class RouteService:
         path, total_distance = self.rf.make_route(
             distance=body.distance,
             start=start,
-            error=10,
             divisions=4
         )
         path_cords = self.rf.nodes_to_cords(path)
