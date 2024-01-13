@@ -47,7 +47,9 @@ const RoutesList = () => {
                   <Stack padding={1}>
                     <CardContent>
                       <Typography color='white'>Bike type: {route.bike_type}</Typography>{' '}
-                      <Typography color='white'>Distance: {route.distance}</Typography>{' '}
+                      <Typography color='white'>
+                        Distance: {Math.round(route.distance) / 1000}
+                      </Typography>{' '}
                       <Typography color='white'>
                         Created at: {new Date(route.created_at).toLocaleString()}
                       </Typography>
