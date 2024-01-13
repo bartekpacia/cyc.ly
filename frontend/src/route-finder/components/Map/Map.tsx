@@ -1,10 +1,12 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
 import { MapContainer, MapContainerProps, Marker, TileLayer } from 'react-leaflet';
 
 import { Box } from '@mui/material';
-import { Map as MapType } from 'leaflet';
+import { LatLng, LatLngExpression, Map as MapType } from 'leaflet';
 
-interface MapProps extends MapContainerProps {}
+interface MapProps extends MapContainerProps {
+  onClick?: (latlng: LatLng) => void;
+}
 
 const tileLayer = {
   attribution:
@@ -12,14 +14,20 @@ const tileLayer = {
   url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 };
 
-const Map = ({ center, children, zoom, ...props }: PropsWithChildren<MapProps>) => {
+const Map = ({ onClick, center, children, zoom, ...props }: PropsWithChildren<MapProps>) => {
   const [map, setMap] = useState<MapType | null>(null);
 
   useEffect(() => {
     map?.setView(center || [0, 0], zoom || 14);
   }, [center, zoom, map]);
 
-  center = [50.2903914, 18.6801092];
+  useEffect(() => {
+    map?.on('click', e => {
+      const latlng = map?.mouseEventToLatLng(e.originalEvent);
+      onClick?.(latlng);
+    });
+  }, [map, onClick]);
+
   return (
     <Box sx={{ height: '100%', width: '100%', borderRadius: '10px' }}>
       <MapContainer

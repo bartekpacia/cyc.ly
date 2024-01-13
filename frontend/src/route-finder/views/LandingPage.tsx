@@ -22,7 +22,7 @@ const LandingPage = () => {
           marginBottom={6}
         >
           <Grow in={true}>
-            <Typography variant='h3' textAlign='center'>
+            <Typography data-cy='main-header' variant='h3' textAlign='center'>
               Cycly - Create your own unique path
             </Typography>
           </Grow>
@@ -39,7 +39,9 @@ const LandingPage = () => {
           </Grow>
           <Grow timeout={2000} in={true}>
             <Link to={routes.generateRoute()}>
-              <Button variant='contained'>Take me there!</Button>
+              <Button data-cy='main-button' variant='contained'>
+                Take me there!
+              </Button>
             </Link>
           </Grow>
         </Stack>

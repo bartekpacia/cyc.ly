@@ -3,11 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware import Middleware
 
 from routes.routes_router import routes_router
-from users.users_router import users_router
 
 
 def init_routers(app_: FastAPI) -> None:
-    app_.include_router(users_router)
     app_.include_router(routes_router)
 
 

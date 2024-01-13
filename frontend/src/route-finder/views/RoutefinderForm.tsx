@@ -1,16 +1,15 @@
-// import { useEffect, useState } from 'react';
-import { useEffect, useMemo } from 'react';
-import { Controller, Form, SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { Marker } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 
-// import { Marker } from 'react-leaflet';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TrackChanges } from '@mui/icons-material';
 import {
   Box,
   Button,
   FormControl,
+  FormHelperText,
   IconButton,
   InputLabel,
   Link,
@@ -21,10 +20,9 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { rootShouldForwardProp } from '@mui/material/styles/styled';
 import { useMutation } from '@tanstack/react-query';
 import 'leaflet/dist/leaflet.css';
-import { Schema, z } from 'zod';
+import { z } from 'zod';
 
 import { BikeType, CreateRouteBodyDTO, api } from '@/core/api';
 import { routes } from '@/core/router';
@@ -45,8 +43,14 @@ enum RouteFinderFormField {
 }
 
 const schema = z.object({
-  [RouteFinderFormField.Lon]: z.number().min(-180).max(180),
-  [RouteFinderFormField.Lat]: z.number().min(-180).max(180),
+  [RouteFinderFormField.Lon]: z
+    .number()
+    .min(-180, 'Value must be larger than -180')
+    .max(180, 'value must be less than 180'),
+  [RouteFinderFormField.Lat]: z
+    .number()
+    .min(-360, 'Value must be larger than -360')
+    .max(360, 'value must be less than 360'),
   [RouteFinderFormField.BikeType]: z.nativeEnum(BikeType),
   [RouteFinderFormField.Distance]: z.number().min(0),
 });
@@ -59,20 +63,28 @@ const RouteFinderForm = () => {
   const { mutateAsync: generateRoute } = useMutation({
     mutationFn: (data: CreateRouteBodyDTO) => api.routes.createRouteRoutesPost(data),
   });
+  const [abort, setAbort] = useState(false);
   const formProps = useForm<SchemaType>({
     resolver: zodResolver(schema),
     mode: 'all',
+    defaultValues: {
+      [RouteFinderFormField.BikeType]: BikeType.Mountain,
+      [RouteFinderFormField.Distance]: 10,
+      [RouteFinderFormField.Lat]: 50.291,
+      [RouteFinderFormField.Lon]: 18.6746,
+    },
   });
 
   const handleSubmit = formProps.handleSubmit(async values => {
     const newRoute = await generateRoute({
       ...values,
+      distance: values.distance * 1000,
       start_point: {
         lat: values.lat,
         lon: values.lon,
       },
     });
-    const id = pushRoute(newRoute);
+    const id = pushRoute({ ...newRoute });
 
     navigate(routes.preview(id.toString()));
   });
@@ -85,12 +97,20 @@ const RouteFinderForm = () => {
   );
 
   useEffect(() => {
+    if (abort) return;
     formProps.reset({
-      ...formProps.watch(),
       [RouteFinderFormField.Lat]: position.lat,
       [RouteFinderFormField.Lon]: position.lng,
     });
-  }, [position, formProps]);
+  }, [position, formProps, abort]);
+
+  const markerPosition = useMemo(
+    () => ({
+      lat: formProps.watch(RouteFinderFormField.Lat) || 0,
+      lng: formProps.watch(RouteFinderFormField.Lon) || 0,
+    }),
+    [formProps.watch(RouteFinderFormField.Lat), formProps.watch(RouteFinderFormField.Lon)],
+  );
 
   return (
     <PathFinderLayout>
@@ -103,31 +123,51 @@ const RouteFinderForm = () => {
             Enter you basic requirements and wait for our system to generate you perfect route
           </Typography>
           <Box sx={{ width: '100%', height: 200 }}>
-            <Map center={position}>
-              <Marker position={position} />
+            <Map
+              center={markerPosition}
+              onClick={latlng => {
+                formProps.setValue(RouteFinderFormField.Lat, latlng.lat);
+                formProps.setValue(RouteFinderFormField.Lon, latlng.lng);
+                setAbort(true);
+              }}
+            >
+              <Marker position={markerPosition} />
             </Map>
           </Box>
 
-          <Stack direction='row' gap={3} alignItems='flex-end'>
-            <TextField
-              {...formProps.register(RouteFinderFormField.Lat)}
-              disabled
-              type='number'
-              variant='outlined'
-              label='Latidute'
-              fullWidth
-            />
+          <Stack direction='row' gap={3} justifyContent='flex-start' alignItems='flex-start'>
+            <Stack gap={2}>
+              <TextField
+                {...formProps.register(RouteFinderFormField.Lat, {
+                  valueAsNumber: true,
+                })}
+                variant='outlined'
+                label='Latidute'
+                fullWidth
+                disabled
+              />
+              <Typography color='error'>{formProps.formState.errors?.lat?.message} </Typography>
+            </Stack>
+            <Stack gap={2}>
+              <TextField
+                {...formProps.register(RouteFinderFormField.Lon, {
+                  valueAsNumber: true,
+                })}
+                disabled
+                variant='outlined'
+                label='Longtidue'
+                fullWidth
+              />
+              <Typography color='error'>{formProps.formState.errors?.lon?.message} </Typography>
+            </Stack>
 
-            <TextField
-              {...formProps.register(RouteFinderFormField.Lon)}
-              disabled
-              type='number'
-              variant='outlined'
-              label='Longtidue'
-              fullWidth
-            />
-
-            <IconButton onClick={getGeoLocation}>
+            <IconButton
+              sx={{ alignSelf: 'center' }}
+              data-cy='get-geolocation'
+              onClick={() => {
+                getGeoLocation(), setAbort(false);
+              }}
+            >
               <TrackChanges />
             </IconButton>
           </Stack>
@@ -147,13 +187,16 @@ const RouteFinderForm = () => {
             </Select>
           </FormControl>
 
-          <Stack direction='row' gap={3}>
+          <Stack direction='column' gap={3}>
             <TextField
               type='number'
               variant='outlined'
-              label='Distance'
-              {...formProps.register(RouteFinderFormField.Distance, { valueAsNumber: true })}
+              label='Distance in km'
+              {...formProps.register(RouteFinderFormField.Distance, {
+                valueAsNumber: true,
+              })}
             />
+            <Typography color='error'>{formProps.formState.errors?.distance?.message} </Typography>
           </Stack>
 
           <Button type='submit' disabled={!formProps.formState.isValid} variant='contained'>

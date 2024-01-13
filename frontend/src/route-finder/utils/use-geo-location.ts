@@ -39,6 +39,7 @@ export const useGeoLocation = ({ onMount }: UseGeoLocationOptions) => {
   const successCallback: PositionCallback = useCallback(
     position => {
       setCoords(position.coords);
+      setCoords({ latitude: 50.291, longitude: 18.6746 } as GeolocationCoordinates);
       setIsLoading(false);
     },
     [setCoords],

@@ -30,4 +30,4 @@ class Route(BaseModel):
     distance: float = Field(
         description="Path Distance",
     )
-    created_at: str = Field(description="Create at")
+    created_at: float = Field(description="Created at")

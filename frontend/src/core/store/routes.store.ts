@@ -36,11 +36,12 @@ export const useRoutesStore = create<RoutesState>()(
               .sort((a, b) => {
                 return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
               })
-              .filter(item => !item.isLiked)
-              .slice(0, 5);
+              .filter(item => !item.isLiked);
+
+            const last5NonLikedItems = nonLikedItems.slice(0, 5);
 
             // Combine liked items and the first 5 non-liked items
-            const routes = likedItems.concat(nonLikedItems);
+            const routes = likedItems.concat(last5NonLikedItems);
 
             return { routes };
           });
@@ -54,7 +55,9 @@ export const useRoutesStore = create<RoutesState>()(
         pushRoute: route => {
           const id = get().getId();
 
-          set(state => ({ routes: [...state.routes, { ...route, id }] }));
+          set(state => ({
+            routes: [...state.routes, { ...route, id, created_at: new Date().toISOString() }],
+          }));
           get().cleanup();
           return id;
         },

@@ -42,6 +42,9 @@ export const mainTheme = createTheme({
       secondary: '#fff',
       disabled: '#fff',
     },
+    error: {
+      main: '#ff0000',
+    },
   },
 
   shape: {
