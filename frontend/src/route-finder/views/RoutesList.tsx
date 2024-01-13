@@ -17,7 +17,6 @@ const RoutesList = () => {
 
   const navigate = useNavigate();
 
-  console.log(routes);
   return (
     <PathFinderLayout>
       <Stack gap={3} sx={{ width: '100%' }} padding={2} maxWidth={800}>
@@ -30,7 +29,7 @@ const RoutesList = () => {
             position: 'sticky',
             top: 0,
             background: theme.palette.background.default,
-            zIndex: 10000,
+            zIndex: 1000,
           })}
         >
           <h1>Routes list</h1>
