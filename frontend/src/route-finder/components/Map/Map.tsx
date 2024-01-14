@@ -3,6 +3,9 @@ import { MapContainer, MapContainerProps, Marker, TileLayer } from 'react-leafle
 
 import { Box } from '@mui/material';
 import { LatLng, LatLngExpression, Map as MapType } from 'leaflet';
+import 'leaflet/dist/images/marker-icon-2x.png';
+import 'leaflet/dist/images/marker-icon.png';
+import 'leaflet/dist/images/marker-shadow.png';
 
 interface MapProps extends MapContainerProps {
   onClick?: (latlng: LatLng) => void;
