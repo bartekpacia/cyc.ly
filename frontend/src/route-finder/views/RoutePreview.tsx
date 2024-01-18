@@ -17,7 +17,7 @@ import {
 import { useMutation } from '@tanstack/react-query';
 import { saveAs } from 'file-saver';
 import { GarminBuilder, buildGPX } from 'gpx-builder';
-import { LatLngExpression } from 'leaflet';
+import { LatLng, LatLngExpression } from 'leaflet';
 
 import { CreateRouteBodyDTO, api } from '@/core/api';
 import { routes as appRoutes } from '@/core/router';
@@ -44,7 +44,7 @@ const PathPreview = () => {
   );
 
   const positions = useMemo(() => {
-    return route?.points.map<LatLngExpression>(point => [point.lat, point.lon]) || [];
+    return route?.points.map<LatLng>(point => new LatLng(point.lat, point.lon)) || [];
   }, [route]);
 
   const { mutateAsync: generateRoute, isPending } = useMutation({
@@ -52,7 +52,7 @@ const PathPreview = () => {
   });
 
   const exportRouteInGPX = () => {
-    const points = positions.map(point => new Point(point[0], point[1]));
+    const points = positions.map(point => new Point(point.lat, point.lng));
 
     const gpxData = new GarminBuilder();
     gpxData.setSegmentPoints(points);
