@@ -1,5 +1,4 @@
 from .routes_schemas import CreateRouteBodyDTO, Route, Coords
-from .mock import mock_data
 
 from time import time
 from core.models.route_finder import RouteFinder
