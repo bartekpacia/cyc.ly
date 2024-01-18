@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Polygon, Polyline } from 'react-leaflet';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import { Archive, Delete, Edit, Favorite, Restore } from '@mui/icons-material';
+import { Archive, Delete, Edit, Favorite, ImportExport, Restore } from '@mui/icons-material';
 import {
   BottomNavigation,
   BottomNavigationAction,
@@ -46,6 +46,12 @@ const PathPreviev = () => {
   const { mutateAsync: generateRoute, isPending } = useMutation({
     mutationFn: (data: CreateRouteBodyDTO) => api.routes.createRouteRoutesPost(data),
   });
+
+  const exportRouteInGPX = async (id: string) => {
+    // print first 3 elements from positions list
+    const first3Elements = positions.slice(0, 3);
+    alert(first3Elements.concat('\n'));
+  };
 
   if (!id || !route) return <Navigate to={appRoutes.generateRoute()} />;
 
@@ -95,6 +101,15 @@ const PathPreviev = () => {
             onClick={() => likeRoute(id)}
             label='Like'
             icon={<Favorite />}
+          />
+
+          <BottomNavigationAction
+            sx={{
+              svg: { fill: route.isLiked ? 'red' : 'white', transition: '300ms ease-in-out' },
+            }}
+            onClick={() => exportRouteInGPX(id)}
+            label='GPX Export'
+            icon={<ImportExport />}
           />
         </BottomNavigation>
       </Box>
