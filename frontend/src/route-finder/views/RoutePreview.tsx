@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Polygon, Polyline } from 'react-leaflet';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import { Archive, Delete, Edit, Favorite, Restore } from '@mui/icons-material';
+import { Archive, Delete, Edit, Favorite, ImportExport, Restore } from '@mui/icons-material';
 import {
   BottomNavigation,
   BottomNavigationAction,
@@ -15,6 +15,8 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
+import { saveAs } from 'file-saver';
+import { GarminBuilder, buildGPX } from 'gpx-builder';
 import { LatLngExpression } from 'leaflet';
 
 import { CreateRouteBodyDTO, api } from '@/core/api';
@@ -25,7 +27,9 @@ import { Map } from '../components/Map/Map';
 import { PathFinderLayout } from '../components/PathFinderLayout';
 import { useGeoLocation } from '../utils/use-geo-location';
 
-const PathPreviev = () => {
+const { Point } = GarminBuilder.MODELS;
+
+const PathPreview = () => {
   const { id } = useParams<{ id: string }>();
   const { routes, pushRoute, deleteRoute, likeRoute } = useRoutesStore();
   const { coords } = useGeoLocation({ onMount: true });
@@ -46,6 +50,18 @@ const PathPreviev = () => {
   const { mutateAsync: generateRoute, isPending } = useMutation({
     mutationFn: (data: CreateRouteBodyDTO) => api.routes.createRouteRoutesPost(data),
   });
+
+  const exportRouteInGPX = () => {
+    const points = positions.map(point => new Point(point[0], point[1]));
+
+    const gpxData = new GarminBuilder();
+    gpxData.setSegmentPoints(points);
+
+    const gpx = buildGPX(gpxData.toObject());
+
+    const blob = new Blob([gpx], { type: 'application/gpx;charset=utf-8' });
+    saveAs(blob, 'cycly-route.gpx');
+  };
 
   if (!id || !route) return <Navigate to={appRoutes.generateRoute()} />;
 
@@ -96,10 +112,17 @@ const PathPreviev = () => {
             label='Like'
             icon={<Favorite />}
           />
+
+          <BottomNavigationAction
+            sx={{ svg: { fill: 'white' } }}
+            onClick={exportRouteInGPX}
+            label='GPX Export'
+            icon={<ImportExport />}
+          />
         </BottomNavigation>
       </Box>
     </PathFinderLayout>
   );
 };
 
-export default PathPreviev;
+export default PathPreview;

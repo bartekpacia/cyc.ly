@@ -62,7 +62,7 @@ class RouteFinder:
     def get_weight_func_back(self):
         def weight_func_back(u, v, d):
             if "visited" in d.keys():
-                if d["visited"]==True:
+                if d["visited"]:
                     return self.get_weight_func_dist()(u, v, d) + float('inf')
                 else:
                     return self.get_weight_func_dist()(u, v, d)
@@ -81,7 +81,7 @@ class RouteFinder:
                     road_type = k
                     found = True
                     break
-        if road_type == None:
+        if road_type is None:
             return 1.0
         else:
             return self.bike_types["BIkes"][self.bike_type][road_type]
@@ -90,7 +90,7 @@ class RouteFinder:
     
     def make_route(self, distance, start=None, divisions = 5):
         ### init varaibles ###
-        if start == None:
+        if start is None:
              start = self.starting_pos
         path = [start]
         part = distance/divisions # distance for the smaller parts of the route
