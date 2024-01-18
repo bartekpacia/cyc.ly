@@ -1,4 +1,4 @@
-FROM python:3.12-bookworm as build
+FROM python:3.12-bookworm as builder
 
 RUN pip install poetry==1.7.0
 
@@ -9,11 +9,14 @@ COPY ./pyproject.toml ./poetry.lock ./
 RUN poetry config warnings.export false
 RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
 
-FROM python:3.12-slim-bookworm as runtime
+FROM python:3.12 as runtime
+
+RUN apt-get update
+RUN apt-get install -y libgdal-dev gdal-bin
 
 WORKDIR /app
 
-COPY --from=build /tmp/requirements.txt /app/requirements.txt
+COPY --from=builder /tmp/requirements.txt /app/requirements.txt
 
 RUN pip install --no-cache-dir -r requirements.txt
 
