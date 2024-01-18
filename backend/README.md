@@ -1,6 +1,13 @@
 # backend
 
-Backend for cyc.ly, written in FastAPI.
+Backend server for cyc.ly, written in FastAPI.
+
+To start the server:
+
+```
+docker build -t cycly-backend .
+docker run -p 8000:80 -t cycly-backend
+```
 
 ### Install dependencies
 
