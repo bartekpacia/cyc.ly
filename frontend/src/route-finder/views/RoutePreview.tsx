@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
+import { GarminBuilder, buildGPX } from 'gpx-builder';
 import { LatLngExpression } from 'leaflet';
 
 import { CreateRouteBodyDTO, api } from '@/core/api';
@@ -25,7 +26,9 @@ import { Map } from '../components/Map/Map';
 import { PathFinderLayout } from '../components/PathFinderLayout';
 import { useGeoLocation } from '../utils/use-geo-location';
 
-const PathPreviev = () => {
+const { Point } = GarminBuilder.MODELS;
+
+const PathPreview = () => {
   const { id } = useParams<{ id: string }>();
   const { routes, pushRoute, deleteRoute, likeRoute } = useRoutesStore();
   const { coords } = useGeoLocation({ onMount: true });
@@ -47,10 +50,13 @@ const PathPreviev = () => {
     mutationFn: (data: CreateRouteBodyDTO) => api.routes.createRouteRoutesPost(data),
   });
 
-  const exportRouteInGPX = async (id: string) => {
-    // print first 3 elements from positions list
-    const first3Elements = positions.slice(0, 3);
-    alert(first3Elements.concat('\n'));
+  const exportRouteInGPX = async () => {
+    const points = positions.map(point => new Point(point[0], point[1]));
+
+    const gpxData = new GarminBuilder();
+    gpxData.setSegmentPoints(points);
+
+    alert(buildGPX(gpxData.toObject()));
   };
 
   if (!id || !route) return <Navigate to={appRoutes.generateRoute()} />;
@@ -107,7 +113,7 @@ const PathPreviev = () => {
             sx={{
               svg: { fill: route.isLiked ? 'red' : 'white', transition: '300ms ease-in-out' },
             }}
-            onClick={() => exportRouteInGPX(id)}
+            onClick={exportRouteInGPX}
             label='GPX Export'
             icon={<ImportExport />}
           />
@@ -117,4 +123,4 @@ const PathPreviev = () => {
   );
 };
 
-export default PathPreviev;
+export default PathPreview;
