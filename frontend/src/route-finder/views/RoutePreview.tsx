@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
+import { saveAs } from 'file-saver';
 import { GarminBuilder, buildGPX } from 'gpx-builder';
 import { LatLngExpression } from 'leaflet';
 
@@ -50,13 +51,16 @@ const PathPreview = () => {
     mutationFn: (data: CreateRouteBodyDTO) => api.routes.createRouteRoutesPost(data),
   });
 
-  const exportRouteInGPX = async () => {
+  const exportRouteInGPX = () => {
     const points = positions.map(point => new Point(point[0], point[1]));
 
     const gpxData = new GarminBuilder();
     gpxData.setSegmentPoints(points);
 
-    alert(buildGPX(gpxData.toObject()));
+    const gpx = buildGPX(gpxData.toObject());
+
+    const blob = new Blob([gpx], { type: 'application/gpx;charset=utf-8' });
+    saveAs(blob, 'cycly-route.gpx');
   };
 
   if (!id || !route) return <Navigate to={appRoutes.generateRoute()} />;
@@ -110,9 +114,7 @@ const PathPreview = () => {
           />
 
           <BottomNavigationAction
-            sx={{
-              svg: { fill: route.isLiked ? 'red' : 'white', transition: '300ms ease-in-out' },
-            }}
+            sx={{ svg: { fill: 'white' } }}
             onClick={exportRouteInGPX}
             label='GPX Export'
             icon={<ImportExport />}
