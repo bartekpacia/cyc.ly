@@ -7,6 +7,7 @@ from core.models.route_finder import RouteFinder
 
 class RouteService:
     def __init__(self):
+        print("start creating RouteFinder")
         self.rf = RouteFinder(
             # kwargs w konstruktorze (z wartościami domyślnymi):
             pos=(
@@ -16,7 +17,7 @@ class RouteService:
             dist=10000,  # Promień, z którego pobiera mapę (środek to 'pos')
             bike_type="Recumbent",  # Rodzaj roweru-> rodzaj roweru jest kluczem w 'bike_types.yaml', w którym każdemu są przypisane wagi do rodzajów nawoierzchni
         )
-        print("created rf")
+        print("end creating RouteFinder")
 
     def create_route(self, body: CreateRouteBodyDTO):
         self.rf.bike_type = body.bike_type
