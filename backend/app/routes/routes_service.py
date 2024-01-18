@@ -1,7 +1,7 @@
 from .routes_schemas import CreateRouteBodyDTO, Route, Coords
 
 from time import time
-from core.models.route_finder import RouteFinder
+from .route_finder import RouteFinder
 
 
 class RouteService:
