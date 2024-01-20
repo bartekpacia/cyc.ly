@@ -33,6 +33,7 @@ const LandingPage = () => {
               sx={{
                 display: { xs: 'none', md: 'flex' },
               }}
+              data-cy='main-sub-header'
             >
               Chart Your Course, Embrace Uniqueness
             </Typography>

@@ -32,7 +32,7 @@ const RoutesList = () => {
             zIndex: 1000,
           })}
         >
-          <h1>Routes list</h1>
+          <h1 data-cy='list-title'>Favorite routes</h1>
           <Button variant='outlined' onClick={() => navigate(AppRoutes.generateRoute())}>
             Generate More
           </Button>
@@ -44,7 +44,7 @@ const RoutesList = () => {
               .filter(r => r.isLiked)
               .map(route => (
                 <Card key={route.id} sx={{ width: '100%' }}>
-                  <Stack padding={1}>
+                  <Stack padding={1} data-cy='route-card'>
                     <CardContent>
                       <Typography color='white'>Bike type: {route.bike_type}</Typography>{' '}
                       <Typography color='white'>

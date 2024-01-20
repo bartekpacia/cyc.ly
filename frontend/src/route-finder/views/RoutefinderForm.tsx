@@ -8,6 +8,8 @@ import { TrackChanges } from '@mui/icons-material';
 import {
   Box,
   Button,
+  CircularProgress,
+  Dialog,
   FormControl,
   FormHelperText,
   IconButton,
@@ -46,11 +48,13 @@ const schema = z.object({
   [RouteFinderFormField.Lon]: z
     .number()
     .min(-180, 'Value must be larger than -180')
-    .max(180, 'value must be less than 180'),
+    .max(180, 'value must be less than 180')
+    .optional(),
   [RouteFinderFormField.Lat]: z
     .number()
     .min(-360, 'Value must be larger than -360')
-    .max(360, 'value must be less than 360'),
+    .max(360, 'value must be less than 360')
+    .optional(),
   [RouteFinderFormField.BikeType]: z.nativeEnum(BikeType),
   [RouteFinderFormField.Distance]: z.number().min(0),
 });
@@ -60,7 +64,7 @@ type SchemaType = z.infer<typeof schema>;
 const RouteFinderForm = () => {
   const navigate = useNavigate();
   const [pushRoute] = useRoutesStore(state => [state.pushRoute, state.routes]);
-  const { mutateAsync: generateRoute } = useMutation({
+  const { mutateAsync: generateRoute, isPending } = useMutation({
     mutationFn: (data: CreateRouteBodyDTO) => api.routes.createRouteRoutesPost(data),
   });
   const [abort, setAbort] = useState(false);
@@ -114,6 +118,13 @@ const RouteFinderForm = () => {
 
   return (
     <PathFinderLayout>
+      <Dialog open={isPending}>
+        <Stack padding={4} display='flex' alignItems='center' gap={3}>
+          <CircularProgress />
+          <Typography variant='h6'>Generating route...</Typography>
+        </Stack>
+      </Dialog>
+
       <form onSubmit={handleSubmit}>
         <Stack sx={{ width: '100%', maxWidth: 500 }} gap={3} padding={3} margin='auto'>
           <Typography variant='h4' textAlign='center'>

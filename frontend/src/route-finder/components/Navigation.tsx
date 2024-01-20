@@ -44,49 +44,62 @@ const Navigation = () => {
                 Cycly
               </Typography>
             </Link>
-
-            <Box
-              sx={{
-                flexGrow: 1,
-                display: 'flex',
-                justifyContent: 'flex-end',
-              }}
-            >
-              <IconButton
-                size='large'
-                aria-label='account of current user'
-                aria-controls='menu-appbar'
-                aria-haspopup='true'
-                onClick={handleOpen}
-                color='inherit'
-              >
-                <MenuIcon />
-              </IconButton>
-
-              <Menu
-                id='menu-appbar'
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-              >
+            <Hidden smDown>
+              {' '}
+              <Stack direction='row' alignItems='center'>
                 {pages.map(({ href, name }) => (
                   <Link href={href} textAlign='center'>
-                    <MenuItem key={href} onClick={handleClose}>
+                    <MenuItem key={href} onClick={handleClose} sx={{ fontSize: 16 }}>
                       {name}
                     </MenuItem>
                   </Link>
                 ))}
-              </Menu>
-            </Box>
+              </Stack>
+            </Hidden>
+            <Hidden smUp>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                }}
+              >
+                <IconButton
+                  size='large'
+                  aria-label='account of current user'
+                  aria-controls='menu-appbar'
+                  aria-haspopup='true'
+                  onClick={handleOpen}
+                  color='inherit'
+                >
+                  <MenuIcon />
+                </IconButton>
+
+                <Menu
+                  id='menu-appbar'
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  {pages.map(({ href, name }) => (
+                    <Link href={href} textAlign='center'>
+                      <MenuItem key={href} onClick={handleClose}>
+                        {name}
+                      </MenuItem>
+                    </Link>
+                  ))}
+                </Menu>
+              </Box>
+            </Hidden>
           </Stack>
         </Toolbar>
       </Container>

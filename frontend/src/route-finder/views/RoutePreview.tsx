@@ -68,15 +68,23 @@ const PathPreview = () => {
   return (
     <PathFinderLayout>
       <Dialog open={isPending}>
-        <CircularProgress />
+        <Stack padding={4} display='flex' alignItems='center' gap={3}>
+          <CircularProgress />
+          <Typography variant='h6'>Generating route...</Typography>
+        </Stack>
       </Dialog>
 
-      <Stack flex={1}>
-        <Typography color='white'>Bike type: {route.bike_type}</Typography>{' '}
-        <Typography color='white'>Distance: {Math.round(route.distance) / 1000} km</Typography>{' '}
-        <Typography color='white'>
-          Created at: {new Date(route.created_at).toLocaleString()}
-        </Typography>
+      <Stack flex={1} position='relative'>
+        <Paper sx={{ position: 'absolute', zIndex: 1000, right: 5, top: 5, padding: 2 }}>
+          <Typography color='white'>Bike type: {route.bike_type}</Typography>{' '}
+          <Typography color='white' data-cy='distance'>
+            Distance: {Math.round(route.distance) / 1000} km
+          </Typography>{' '}
+          <Typography color='white'>
+            Created at: {new Date(route.created_at).toLocaleString()}
+          </Typography>
+        </Paper>
+
         <Box sx={{ height: '100%', width: '100%', position: 'relative' }}>
           <Box sx={{ position: 'absolute', top: 0, right: '100%' }}></Box>
           <Map center={position}>
