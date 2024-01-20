@@ -26,11 +26,12 @@ import { useRoutesStore } from '@/core/store/routes.store';
 import { Map } from '../components/Map/Map';
 import { PathFinderLayout } from '../components/PathFinderLayout';
 import { useGeoLocation } from '../utils/use-geo-location';
+import useGetID from '../utils/use-get-id';
 
 const { Point } = GarminBuilder.MODELS;
 
 const PathPreview = () => {
-  const { id } = useParams<{ id: string }>();
+  const id = useGetID();
   const { routes, pushRoute, deleteRoute, likeRoute } = useRoutesStore();
   const { coords } = useGeoLocation({ onMount: true });
 
