@@ -1,9 +1,9 @@
 import { lazy } from 'react';
-import { createBrowserRouter, createHashRouter } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 
 import { routes } from '.';
 
-export const router = createHashRouter([
+export const router = createBrowserRouter([
   {
     path: routes.home(),
     Component: lazy(() => import('@/route-finder/views/LandingPage')),
