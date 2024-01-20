@@ -7,6 +7,10 @@ const useGetID = () => {
     // Get the current pathname
     const pathname = window.location.pathname;
 
+    console.log(pathname);
+    setTimeout(() => {
+      console.log(pathname);
+    }, 1000);
     // Split the pathname by /
     const pathArray = pathname.split('/');
 
