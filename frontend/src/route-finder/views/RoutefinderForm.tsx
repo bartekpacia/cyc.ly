@@ -84,8 +84,8 @@ const RouteFinderForm = () => {
       ...values,
       distance: values.distance * 1000,
       start_point: {
-        lat: values.lat,
-        lon: values.lon,
+        lat: values.lat || 0,
+        lon: values.lon || 0,
       },
     });
     const id = pushRoute({ ...newRoute });

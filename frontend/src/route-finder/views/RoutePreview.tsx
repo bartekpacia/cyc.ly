@@ -63,7 +63,7 @@ const PathPreview = () => {
     saveAs(blob, 'cycly-route.gpx');
   };
 
-  if (!id || !route) return <Navigate to={appRoutes.generateRoute()} />;
+  if (!id || !route) return <Typography>Route not found</Typography>;
 
   return (
     <PathFinderLayout>
