@@ -96,6 +96,7 @@ const PathPreview = () => {
       <Box sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }}>
         <BottomNavigation showLabels sx={{ padding: 2 }}>
           <BottomNavigationAction
+            disableRipple
             onClick={async () => {
               if (!route?.points[0]) return;
 
@@ -114,6 +115,7 @@ const PathPreview = () => {
           />
 
           <BottomNavigationAction
+            disableRipple
             sx={{
               svg: { fill: route.isLiked ? 'red' : 'white', transition: '300ms ease-in-out' },
             }}
@@ -123,6 +125,7 @@ const PathPreview = () => {
           />
 
           <BottomNavigationAction
+            disableRipple
             sx={{ svg: { fill: 'white' } }}
             onClick={exportRouteInGPX}
             label='GPX Export'
