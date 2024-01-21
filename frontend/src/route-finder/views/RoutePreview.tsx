@@ -31,7 +31,7 @@ import useGetID from '../utils/use-get-id';
 const { Point } = GarminBuilder.MODELS;
 
 const PathPreview = () => {
-  const id = useGetID();
+  const { id } = useParams<{ id: string }>();
   const { routes, pushRoute, deleteRoute, likeRoute } = useRoutesStore();
   const { coords } = useGeoLocation({ onMount: true });
 
